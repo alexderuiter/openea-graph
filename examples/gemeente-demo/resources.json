@@ -2,16 +2,34 @@
   {
     "uri": "oea://gemeente-demo/application/djuma",
     "type": "archimate://element-type/application-component",
-    "name": "Djuma"
+    "name": "Djuma",
+    "lifecycle": {
+      "status": "inUse"
+    }
   },
   {
     "uri": "oea://gemeente-demo/application-service/case-management",
     "type": "archimate://element-type/application-service",
-    "name": "Zaakafhandelingsservice"
+    "name": "Zaakafhandelingsservice",
+    "lifecycle": {
+      "status": "inUse"
+    }
   },
   {
     "uri": "oea://gemeente-demo/business-process/permit-application",
     "type": "archimate://element-type/business-process",
-    "name": "Vergunningaanvraag behandelen"
+    "name": "Vergunningaanvraag behandelen",
+    "lifecycle": {
+      "status": "inUse"
+    }
+  },
+  {
+    "uri": "oea://gemeente-demo/application/new-case-system",
+    "type": "archimate://element-type/application-component",
+    "name": "Nieuw zaaksysteem",
+    "lifecycle": {
+      "status": "planned",
+      "validFrom": "2027-01-01"
+    }
   }
 ]

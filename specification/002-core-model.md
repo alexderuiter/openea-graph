@@ -19,6 +19,32 @@ Required fields:
 - `uri`
 - `type`
 - `name`
+- `lifecycle.status`
+
+Every resource MUST have exactly one primary lifecycle status:
+
+- `concept` — an idea that has not been approved;
+- `planned` — approved or intended, but not yet in use;
+- `inUse` — currently in operational use;
+- `phasingOut` — still in use, but being retired or replaced;
+- `retired` — no longer in use;
+- `rejected` — considered and explicitly not selected.
+
+The lifecycle MAY include `validFrom` and `expectedUntil` dates. These dates MUST use the ISO 8601 full-date format (`YYYY-MM-DD`). Lifecycle status is a property of the resource, not of a view. Context-specific lifecycle status is outside the scope of version 0.1.
+
+Example:
+
+```json
+{
+  "uri": "oea://gemeente-demo/application/new-case-system",
+  "type": "archimate://element-type/application-component",
+  "name": "Nieuw zaaksysteem",
+  "lifecycle": {
+    "status": "planned",
+    "validFrom": "2027-01-01"
+  }
+}
+```
 
 ## Relationship
 
