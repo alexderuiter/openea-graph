@@ -1,14 +1,15 @@
 [
   {
-    "uri": "oea://gemeente-demo/relationship/djuma-realizes-case-management",
-    "type": "archimate://relationship-type/realization",
-    "from": "oea://gemeente-demo/application/djuma",
-    "to": "oea://gemeente-demo/application-service/case-management"
+    "uri": "oea://amsterdam/relationship/current-close-match-gemma",
+    "type": "oea://relationship-type/close-match",
+    "from": "oea://amsterdam/application/current-case-system",
+    "to": "gemma://reference-component/case-registration",
+    "description": "De Amsterdamse afbakening is breder, maar ligt dicht bij de GEMMA-referentie."
   },
   {
-    "uri": "oea://gemeente-demo/relationship/case-management-serves-permit-process",
-    "type": "archimate://relationship-type/serving",
-    "from": "oea://gemeente-demo/application-service/case-management",
-    "to": "oea://gemeente-demo/business-process/permit-application"
+    "uri": "oea://amsterdam/relationship/legacy-replaced-by-new",
+    "type": "oea://relationship-type/replaced-by",
+    "from": "oea://amsterdam/application/legacy-case-system",
+    "to": "oea://amsterdam/application/new-case-platform"
   }
 ]

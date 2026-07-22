@@ -6,6 +6,19 @@ Reasoning is optional and modular.
 
 An inverse rule can derive `B parentOf A` from `A childOf B`.
 
+Version 0.1 represents an inverse rule as:
+
+```json
+{
+  "uri": "oea://rule/replaced-by-inverse",
+  "kind": "inverse",
+  "relationshipType": "oea://relationship-type/replaced-by",
+  "inverseType": "oea://relationship-type/replaces"
+}
+```
+
+The reference reasoner implements inverse rules only. Given an explicit assertion that the historical case system `replaced-by` the new platform, it emits the derived assertion that the new platform `replaces` the historical system. The derived assertion is output separately and is not written to the canonical repository.
+
 ## Symmetric rules
 
 A symmetric relationship can derive `B relatedTo A` from `A relatedTo B`.

@@ -1,0 +1,6 @@
+[
+  {"uri": "oea://relationship-type/close-match", "name": "Close match", "category": "alignment"},
+  {"uri": "oea://relationship-type/deviates-from", "name": "Deviates from", "category": "alignment"},
+  {"uri": "oea://relationship-type/replaced-by", "name": "Replaced by", "category": "lifecycle"},
+  {"uri": "oea://relationship-type/replaces", "name": "Replaces", "category": "lifecycle"}
+]

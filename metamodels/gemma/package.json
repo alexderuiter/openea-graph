@@ -1,0 +1,10 @@
+{
+  "uri": "gemma://metamodel/demo/0.1",
+  "name": "Minimal GEMMA demo package",
+  "version": "0.1.0-draft",
+  "status": "illustrative",
+  "files": {
+    "resourceTypes": "resource-types.json",
+    "relationshipTypes": "relationship-types.json"
+  }
+}

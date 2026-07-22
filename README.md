@@ -18,6 +18,8 @@ This repository is the initial foundation. It defines:
 - reasoning rules;
 - reviewable change sets for AI-assisted imports.
 
+The `examples/gemeente-demo` repository is the normative end-to-end v0.1 example. It combines Amsterdam resources, a GEMMA reference component, lifecycle and confidence values, framework alignment, validation and one inverse reasoning rule.
+
 ## Core idea
 
 A stored relationship is an explicit fact:
@@ -54,10 +56,58 @@ Derived knowledge is calculated separately and is never confused with source fac
 7. Plain JSON remains the portable interchange format
 8. RDF/JSON-LD and ArchiMate Exchange are export targets, not hard dependencies
 
+## Run the v0.1 reference tooling
+
+Python 3.10 or newer is required. From the repository root:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+openea validate examples/gemeente-demo
+```
+
+Expected result:
+
+```text
+OK: examples/gemeente-demo is a valid OpenEA Graph 0.1 repository.
+```
+
+Run the minimal inverse reasoner without changing the repository:
+
+```bash
+openea reason examples/gemeente-demo
+```
+
+It derives that the new platform `replaces` the historical system from the explicit inverse `replaced-by` assertion and includes provenance in the output.
+
+Run all tests:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Without installing the package, equivalent commands from the repository root are:
+
+```bash
+python -m openea validate examples/gemeente-demo
+python -m openea reason examples/gemeente-demo
+```
+
+## Validator scope
+
+The v0.1 validator checks:
+
+- unique resource and relationship URIs;
+- required Resource fields (`uri`, `type`, `name`);
+- known resource types and relationship predicates from active metamodel packages;
+- lifecycle status and confidence values when present;
+- relationship endpoints that reference existing resources;
+- readable, location-specific errors for invalid repositories.
+
 ## Next milestones
 
 - complete the ArchiMate 3.2 metamodel package;
-- add a validator;
 - add spreadsheet-to-changeset instructions;
 - add ArchiMate Open Exchange export;
 - add JSON-LD export.

@@ -1,38 +1,32 @@
 [
   {
-    "uri": "oea://gemeente-demo/application/djuma",
+    "uri": "oea://amsterdam/application/current-case-system",
     "type": "archimate://element-type/application-component",
-    "name": "Djuma",
-    "lifecycle": {
-      "status": "inUse"
-    },
-    "confidence": "verified"
+    "name": "Amsterdams Zaaksysteem",
+    "description": "Het huidige zaakafhandelingssysteem van de gemeente.",
+    "status": "inUse",
+    "confidence": "verified",
+    "properties": {"owner": "Gemeente Amsterdam"}
   },
   {
-    "uri": "oea://gemeente-demo/application-service/case-management",
-    "type": "archimate://element-type/application-service",
-    "name": "Zaakafhandelingsservice",
-    "lifecycle": {
-      "status": "inUse"
-    },
+    "uri": "oea://amsterdam/application/new-case-platform",
+    "type": "archimate://element-type/application-component",
+    "name": "Nieuw Zaakplatform",
+    "status": "concept",
+    "confidence": "proposed"
+  },
+  {
+    "uri": "oea://amsterdam/application/legacy-case-system",
+    "type": "archimate://element-type/application-component",
+    "name": "Historisch Zaaksysteem",
+    "status": "phasingOut",
     "confidence": "assumed"
   },
   {
-    "uri": "oea://gemeente-demo/business-process/permit-application",
-    "type": "archimate://element-type/business-process",
-    "name": "Vergunningaanvraag behandelen",
-    "lifecycle": {
-      "status": "inUse"
-    },
+    "uri": "gemma://reference-component/case-registration",
+    "type": "gemma://resource-type/application-component",
+    "name": "Zaakregistratiecomponent",
+    "status": "inUse",
     "confidence": "verified"
-  },
-  {
-    "uri": "oea://gemeente-demo/application/new-case-system",
-    "type": "archimate://element-type/application-component",
-    "name": "Nieuw zaaksysteem",
-    "lifecycle": {
-      "status": "concept"
-    },
-    "confidence": "proposed"
   }
 ]

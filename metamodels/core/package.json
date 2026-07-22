@@ -1,0 +1,10 @@
+{
+  "uri": "oea://metamodel/core/0.1",
+  "name": "OpenEA Graph core relationship vocabulary",
+  "version": "0.1.0-draft",
+  "files": {
+    "resourceTypes": "resource-types.json",
+    "relationshipTypes": "relationship-types.json",
+    "reasoning": "reasoning.json"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "rules": [
+    {
+      "uri": "oea://rule/replaced-by-inverse",
+      "kind": "inverse",
+      "relationshipType": "oea://relationship-type/replaced-by",
+      "inverseType": "oea://relationship-type/replaces"
+    }
+  ]
+}

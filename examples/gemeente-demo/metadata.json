@@ -2,5 +2,9 @@
   "uri": "oea://gemeente-demo/repository",
   "name": "Gemeente demo",
   "specificationVersion": "0.1.0-draft",
-  "metamodels": ["archimate://metamodel/3.2"]
+  "metamodels": [
+    "oea://metamodel/core/0.1",
+    "archimate://metamodel/3.2",
+    "gemma://metamodel/demo/0.1"
+  ]
 }

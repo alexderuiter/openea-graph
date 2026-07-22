@@ -12,9 +12,7 @@
         "uri": "oea://gemeente-demo/application/digid",
         "type": "archimate://element-type/application-component",
         "name": "DigiD",
-        "lifecycle": {
-          "status": "inUse"
-        },
+        "status": "inUse",
         "confidence": "assumed"
       }
     }
