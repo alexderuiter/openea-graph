@@ -4,6 +4,8 @@
 
 The core is framework-neutral. ArchiMate, GEMMA, NORA, BPMN and other modelling languages are represented as metamodel packages on top of the same graph.
 
+New contributors should start with [FOUNDATIONS.md](FOUNDATIONS.md), which describes the project's enduring design philosophy and the boundaries of the core.
+
 ## Status
 
 Version: `0.1.0-draft`
