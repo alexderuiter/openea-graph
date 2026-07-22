@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openea.example/schema/relationship.schema.json",
+  "title": "OpenEA Graph Relationship",
+  "type": "object",
+  "required": ["uri", "type", "from", "to"],
+  "properties": {
+    "uri": { "type": "string", "format": "uri" },
+    "type": { "type": "string", "format": "uri" },
+    "from": { "type": "string", "format": "uri" },
+    "to": { "type": "string", "format": "uri" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "properties": { "type": "object", "additionalProperties": true },
+    "provenance": { "$ref": "provenance.schema.json" }
+  },
+  "additionalProperties": false
+}

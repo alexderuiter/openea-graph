@@ -1,0 +1,15 @@
+{
+  "status": "illustrative-not-complete",
+  "constraints": [
+    {
+      "relationshipType": "archimate://relationship-type/serving",
+      "allowedFrom": ["archimate://element-type/application-service"],
+      "allowedTo": ["archimate://element-type/business-process", "archimate://element-type/business-service"]
+    },
+    {
+      "relationshipType": "archimate://relationship-type/realization",
+      "allowedFrom": ["archimate://element-type/application-component"],
+      "allowedTo": ["archimate://element-type/application-service"]
+    }
+  ]
+}

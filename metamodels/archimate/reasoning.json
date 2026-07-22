@@ -1,0 +1,14 @@
+{
+  "rules": [
+    {
+      "uri": "archimate://rule/application-indirectly-supports-business",
+      "kind": "propertyChain",
+      "if": [
+        "archimate://relationship-type/realization",
+        "archimate://relationship-type/serving"
+      ],
+      "then": "oea://relationship-type/indirectly-supports",
+      "status": "experimental"
+    }
+  ]
+}

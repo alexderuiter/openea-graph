@@ -1,0 +1,10 @@
+{
+  "uri": "oea://repository/example",
+  "name": "OpenEA Graph repository",
+  "specificationVersion": "0.1.0-draft",
+  "metamodels": ["archimate://metamodel/3.2"],
+  "namespaces": {
+    "oea": "oea://example/",
+    "archimate": "archimate://"
+  }
+}

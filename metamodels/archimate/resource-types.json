@@ -1,0 +1,12 @@
+[
+  {"uri":"archimate://element-type/business-actor","name":"Business Actor","category":"business","kind":"active-structure"},
+  {"uri":"archimate://element-type/business-role","name":"Business Role","category":"business","kind":"active-structure"},
+  {"uri":"archimate://element-type/business-process","name":"Business Process","category":"business","kind":"behavior"},
+  {"uri":"archimate://element-type/business-service","name":"Business Service","category":"business","kind":"behavior"},
+  {"uri":"archimate://element-type/application-component","name":"Application Component","category":"application","kind":"active-structure"},
+  {"uri":"archimate://element-type/application-service","name":"Application Service","category":"application","kind":"behavior"},
+  {"uri":"archimate://element-type/data-object","name":"Data Object","category":"application","kind":"passive-structure"},
+  {"uri":"archimate://element-type/node","name":"Node","category":"technology","kind":"active-structure"},
+  {"uri":"archimate://element-type/technology-service","name":"Technology Service","category":"technology","kind":"behavior"},
+  {"uri":"archimate://element-type/capability","name":"Capability","category":"strategy","kind":"behavior"}
+]

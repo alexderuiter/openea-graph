@@ -1,0 +1,17 @@
+[
+  {
+    "uri": "oea://gemeente-demo/application/djuma",
+    "type": "archimate://element-type/application-component",
+    "name": "Djuma"
+  },
+  {
+    "uri": "oea://gemeente-demo/application-service/case-management",
+    "type": "archimate://element-type/application-service",
+    "name": "Zaakafhandelingsservice"
+  },
+  {
+    "uri": "oea://gemeente-demo/business-process/permit-application",
+    "type": "archimate://element-type/business-process",
+    "name": "Vergunningaanvraag behandelen"
+  }
+]

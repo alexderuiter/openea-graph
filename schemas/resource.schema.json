@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openea.example/schema/resource.schema.json",
+  "title": "OpenEA Graph Resource",
+  "type": "object",
+  "required": ["uri", "type", "name"],
+  "properties": {
+    "uri": { "type": "string", "format": "uri" },
+    "type": { "type": "string", "format": "uri" },
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "properties": { "type": "object", "additionalProperties": true },
+    "provenance": { "$ref": "provenance.schema.json" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,13 @@
+{
+  "uri": "archimate://metamodel/3.2",
+  "name": "ArchiMate metamodel package",
+  "version": "0.1.0-draft",
+  "targetFrameworkVersion": "3.2",
+  "status": "partial",
+  "files": {
+    "resourceTypes": "resource-types.json",
+    "relationshipTypes": "relationship-types.json",
+    "constraints": "constraints.json",
+    "reasoning": "reasoning.json"
+  }
+}

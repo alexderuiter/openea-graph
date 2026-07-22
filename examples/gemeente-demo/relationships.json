@@ -1,0 +1,14 @@
+[
+  {
+    "uri": "oea://gemeente-demo/relationship/djuma-realizes-case-management",
+    "type": "archimate://relationship-type/realization",
+    "from": "oea://gemeente-demo/application/djuma",
+    "to": "oea://gemeente-demo/application-service/case-management"
+  },
+  {
+    "uri": "oea://gemeente-demo/relationship/case-management-serves-permit-process",
+    "type": "archimate://relationship-type/serving",
+    "from": "oea://gemeente-demo/application-service/case-management",
+    "to": "oea://gemeente-demo/business-process/permit-application"
+  }
+]

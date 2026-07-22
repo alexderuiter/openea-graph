@@ -1,0 +1,6 @@
+{
+  "uri": "oea://gemeente-demo/repository",
+  "name": "Gemeente demo",
+  "specificationVersion": "0.1.0-draft",
+  "metamodels": ["archimate://metamodel/3.2"]
+}

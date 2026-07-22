@@ -1,0 +1,11 @@
+[
+  {"uri":"archimate://relationship-type/assignment","name":"Assignment","category":"structural"},
+  {"uri":"archimate://relationship-type/realization","name":"Realization","category":"structural"},
+  {"uri":"archimate://relationship-type/serving","name":"Serving","category":"dependency"},
+  {"uri":"archimate://relationship-type/access","name":"Access","category":"dependency"},
+  {"uri":"archimate://relationship-type/flow","name":"Flow","category":"dynamic"},
+  {"uri":"archimate://relationship-type/triggering","name":"Triggering","category":"dynamic"},
+  {"uri":"archimate://relationship-type/composition","name":"Composition","category":"structural"},
+  {"uri":"archimate://relationship-type/aggregation","name":"Aggregation","category":"structural"},
+  {"uri":"archimate://relationship-type/association","name":"Association","category":"other"}
+]

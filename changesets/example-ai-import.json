@@ -1,0 +1,18 @@
+{
+  "uri": "oea://gemeente-demo/changeset/2026-07-22-001",
+  "status": "proposed",
+  "createdBy": "ai-assistant",
+  "createdAt": "2026-07-22T13:00:00Z",
+  "sourceReferences": ["spreadsheet:application-inventory.xlsx#Sheet1"],
+  "confidence": 0.91,
+  "operations": [
+    {
+      "operation": "createResource",
+      "resource": {
+        "uri": "oea://gemeente-demo/application/digid",
+        "type": "archimate://element-type/application-component",
+        "name": "DigiD"
+      }
+    }
+  ]
+}
