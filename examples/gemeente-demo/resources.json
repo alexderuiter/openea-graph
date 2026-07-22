@@ -5,7 +5,8 @@
     "name": "Djuma",
     "lifecycle": {
       "status": "inUse"
-    }
+    },
+    "confidence": "verified"
   },
   {
     "uri": "oea://gemeente-demo/application-service/case-management",
@@ -13,7 +14,8 @@
     "name": "Zaakafhandelingsservice",
     "lifecycle": {
       "status": "inUse"
-    }
+    },
+    "confidence": "assumed"
   },
   {
     "uri": "oea://gemeente-demo/business-process/permit-application",
@@ -21,15 +23,16 @@
     "name": "Vergunningaanvraag behandelen",
     "lifecycle": {
       "status": "inUse"
-    }
+    },
+    "confidence": "verified"
   },
   {
     "uri": "oea://gemeente-demo/application/new-case-system",
     "type": "archimate://element-type/application-component",
     "name": "Nieuw zaaksysteem",
     "lifecycle": {
-      "status": "planned",
-      "validFrom": "2027-01-01"
-    }
+      "status": "concept"
+    },
+    "confidence": "proposed"
   }
 ]

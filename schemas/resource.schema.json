@@ -3,7 +3,7 @@
   "$id": "https://openea.example/schema/resource.schema.json",
   "title": "OpenEA Graph Resource",
   "type": "object",
-  "required": ["uri", "type", "name", "lifecycle"],
+  "required": ["uri", "type", "name", "lifecycle", "confidence"],
   "properties": {
     "uri": { "type": "string", "format": "uri" },
     "type": { "type": "string", "format": "uri" },
@@ -20,6 +20,9 @@
         "expectedUntil": { "type": "string", "format": "date" }
       },
       "additionalProperties": false
+    },
+    "confidence": {
+      "enum": ["proposed", "assumed", "verified", "deprecated"]
     },
     "properties": { "type": "object", "additionalProperties": true },
     "provenance": { "$ref": "provenance.schema.json" }

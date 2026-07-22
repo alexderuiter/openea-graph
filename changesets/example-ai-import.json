@@ -14,7 +14,8 @@
         "name": "DigiD",
         "lifecycle": {
           "status": "inUse"
-        }
+        },
+        "confidence": "assumed"
       }
     }
   ]
