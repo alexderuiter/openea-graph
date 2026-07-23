@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sysconfig
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlparse
@@ -33,8 +34,8 @@ def _is_uri(value: object) -> bool:
     return isinstance(value, str) and bool(urlparse(value).scheme)
 
 
-def _package_directory(project_root: Path, package_uri: str) -> Path | None:
-    for package_file in (project_root / "metamodels").glob("*/package.json"):
+def _package_directory(metamodel_root: Path, package_uri: str) -> Path | None:
+    for package_file in metamodel_root.glob("*/package.json"):
         try:
             package = json.loads(package_file.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
@@ -44,13 +45,13 @@ def _package_directory(project_root: Path, package_uri: str) -> Path | None:
     return None
 
 
-def load_vocabulary(project_root: Path, metadata: dict, errors: list[ValidationError]):
+def load_vocabulary(metamodel_root: Path, metadata: dict, errors: list[ValidationError]):
     resource_types: set[str] = set()
     relationship_types: set[str] = set()
     rules: list[dict] = []
 
     for index, package_uri in enumerate(metadata.get("metamodels", [])):
-        directory = _package_directory(project_root, package_uri)
+        directory = _package_directory(metamodel_root, package_uri)
         if directory is None:
             errors.append(ValidationError(f"metadata.metamodels[{index}]", f"unknown metamodel package {package_uri!r}"))
             continue
@@ -72,7 +73,14 @@ def load_vocabulary(project_root: Path, metadata: dict, errors: list[ValidationE
 
 def validate_repository(repository: Path, project_root: Path | None = None):
     repository = repository.resolve()
-    project_root = (project_root or Path(__file__).resolve().parents[1]).resolve()
+    if project_root is not None:
+        metamodel_root = project_root.resolve() / "metamodels"
+    else:
+        source_root = Path(__file__).resolve().parents[1] / "metamodels"
+        installed_root = (
+            Path(sysconfig.get_path("data")) / "share" / "openea-graph" / "metamodels"
+        )
+        metamodel_root = source_root if source_root.is_dir() else installed_root
     errors: list[ValidationError] = []
     metadata = _load_json(repository / "metadata.json", errors)
     resources = _load_json(repository / "resources.json", errors)
@@ -80,7 +88,7 @@ def validate_repository(repository: Path, project_root: Path | None = None):
     if not isinstance(metadata, dict) or not isinstance(resources, list) or not isinstance(relationships, list):
         return errors, [], []
 
-    resource_types, relationship_types, rules = load_vocabulary(project_root, metadata, errors)
+    resource_types, relationship_types, rules = load_vocabulary(metamodel_root, metadata, errors)
     resource_uris: set[str] = set()
     all_uris: set[str] = set()
 

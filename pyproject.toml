@@ -1,15 +1,46 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "openea-graph"
 version = "0.1.0.dev0"
 description = "Minimal validator and reasoner for OpenEA Graph 0.1"
+readme = "README.md"
 requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Alex de Ruiter" },
+]
+keywords = ["enterprise-architecture", "knowledge-graph", "open-standard"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries",
+]
+
+[project.urls]
+Homepage = "https://github.com/alexderuiter/openea-graph"
+Repository = "https://github.com/alexderuiter/openea-graph"
+Issues = "https://github.com/alexderuiter/openea-graph/issues"
+Changelog = "https://github.com/alexderuiter/openea-graph/blob/main/CHANGELOG.md"
 
 [project.scripts]
 openea = "openea.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["openea*"]
+
+[tool.setuptools.data-files]
+"share/openea-graph/metamodels/archimate" = ["metamodels/archimate/*.json"]
+"share/openea-graph/metamodels/core" = ["metamodels/core/*.json"]
+"share/openea-graph/metamodels/gemma" = ["metamodels/gemma/*.json"]

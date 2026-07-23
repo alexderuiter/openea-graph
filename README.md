@@ -66,6 +66,8 @@ Python 3.10 or newer is required. From the repository root:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
+openea init my-architecture
+openea validate my-architecture
 openea validate examples/gemeente-demo
 ```
 
@@ -74,6 +76,9 @@ Expected result:
 ```text
 OK: examples/gemeente-demo is a valid OpenEA Graph 0.1 repository.
 ```
+
+See [Getting started](docs/getting-started.md) for the complete first-repository
+walkthrough.
 
 Run the minimal inverse reasoner without changing the repository:
 
@@ -88,6 +93,10 @@ Run all tests:
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+Every push and pull request runs these tests across the supported Python
+versions. CI also builds the distributable package and exercises `openea init`
+and `openea validate` from an isolated wheel installation.
 
 Without installing the package, equivalent commands from the repository root are:
 
@@ -114,6 +123,14 @@ The v0.1 validator checks:
 - add ArchiMate Open Exchange export;
 - add JSON-LD export.
 
+Release criteria and the intentionally manual publication boundary are
+documented in [Releasing](docs/releasing.md). User-visible changes are recorded
+in the [Changelog](CHANGELOG.md).
+
 ## License
 
-No license has been selected yet. Add a license only after deciding whether the project should be permissive, reciprocal, or initially private.
+OpenEA Graph is licensed under the [Apache License 2.0](LICENSE).
+
+The license permits commercial and non-commercial use, modification and
+distribution, subject to its terms. It does not grant permission to use project
+names or trademarks except as required to describe the origin of the work.

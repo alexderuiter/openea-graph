@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Validate the normative example
+        run: python -m openea validate examples/gemeente-demo
+
+  package:
+    name: Build and smoke-test distributions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install build frontend
+        run: python -m pip install build
+
+      - name: Build source and wheel distributions
+        run: python -m build
+
+      - name: Install the wheel in an isolated environment
+        run: |
+          python -m venv "${RUNNER_TEMP}/openea-smoke"
+          "${RUNNER_TEMP}/openea-smoke/bin/python" -m pip install dist/*.whl
+
+      - name: Exercise the installed command outside the checkout
+        working-directory: ${{ runner.temp }}
+        run: |
+          "${RUNNER_TEMP}/openea-smoke/bin/openea" init first-repository
+          "${RUNNER_TEMP}/openea-smoke/bin/openea" validate first-repository
