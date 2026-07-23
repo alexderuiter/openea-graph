@@ -5,10 +5,26 @@
   "type": "object",
   "required": ["uri", "type", "from", "to"],
   "properties": {
-    "uri": { "type": "string", "format": "uri" },
-    "type": { "type": "string", "format": "uri" },
-    "from": { "type": "string", "format": "uri" },
-    "to": { "type": "string", "format": "uri" },
+    "uri": {
+      "type": "string",
+      "format": "uri",
+      "description": "An absolute URI or a compact identifier using a namespace prefix declared by the repository."
+    },
+    "type": {
+      "type": "string",
+      "format": "uri",
+      "description": "An absolute relationship type URI or a compact identifier using a declared namespace prefix."
+    },
+    "from": {
+      "type": "string",
+      "format": "uri",
+      "description": "An absolute resource URI or a compact identifier using a declared namespace prefix."
+    },
+    "to": {
+      "type": "string",
+      "format": "uri",
+      "description": "An absolute resource URI or a compact identifier using a declared namespace prefix."
+    },
     "name": { "type": "string" },
     "description": { "type": "string" },
     "properties": { "type": "object", "additionalProperties": true },

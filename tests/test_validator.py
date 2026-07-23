@@ -1,5 +1,5 @@
-import json
 import io
+import json
 import tempfile
 import unittest
 from contextlib import redirect_stdout
@@ -8,11 +8,12 @@ from pathlib import Path
 from openea.cli import main
 from openea.initializer import InitializationError, initialize_repository
 from openea.reasoner import derive_inverse_relationships
-from openea.validator import validate_repository
+from openea.validator import expand_identifier, validate_repository
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEMO = PROJECT_ROOT / "examples" / "gemeente-demo"
+WORKSPACE_START = PROJECT_ROOT / "examples" / "workspace-start"
 
 
 class ValidatorTests(unittest.TestCase):
@@ -34,7 +35,7 @@ class ValidatorTests(unittest.TestCase):
             self.assertEqual("My architecture", metadata["name"])
             self.assertEqual("oea://example.org/my-architecture/repository", metadata["uri"])
             self.assertEqual(
-                "oea://example.org/my-architecture/", metadata["namespaces"]["oea"]
+                "oea://example.org/my-architecture/", metadata["namespaces"]["work"]
             )
             errors, _, _ = validate_repository(target, PROJECT_ROOT)
             self.assertEqual([], errors)
@@ -59,9 +60,97 @@ class ValidatorTests(unittest.TestCase):
             self.assertEqual(0, result)
             self.assertIn(f"openea validate {target}", output.getvalue())
 
+    def test_init_uses_a_workspace_urn_by_default(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "personal-architecture"
+            initialize_repository(target)
+
+            metadata = json.loads((target / "metadata.json").read_text())
+            self.assertEqual(
+                "urn:openea:workspace:personal-architecture:repository",
+                metadata["uri"],
+            )
+            self.assertEqual(
+                {"work": "urn:openea:workspace:personal-architecture:"},
+                metadata["namespaces"],
+            )
+
     def test_gemeente_demo_is_valid(self):
         errors, _, _ = validate_repository(DEMO, PROJECT_ROOT)
         self.assertEqual([], errors)
+
+    def test_workspace_urns_and_compact_identifiers_are_valid(self):
+        errors, _, _ = validate_repository(WORKSPACE_START, PROJECT_ROOT)
+        self.assertEqual([], errors)
+        self.assertEqual(
+            "urn:openea:workspace:alex:amsterdam:component/zaaksysteem",
+            expand_identifier(
+                "ams-work:component/zaaksysteem",
+                {"ams-work": "urn:openea:workspace:alex:amsterdam:"},
+            ),
+        )
+
+    def test_https_namespaces_remain_valid(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            initialize_repository(
+                target,
+                uri="https://architecture.example/repository",
+                namespace="https://architecture.example/resource/",
+            )
+
+            errors, _, _ = validate_repository(target, PROJECT_ROOT)
+            self.assertEqual([], errors)
+
+    def test_compact_and_expanded_identifiers_resolve_to_the_same_resource(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            metadata = json.loads((WORKSPACE_START / "metadata.json").read_text())
+            resources = json.loads((WORKSPACE_START / "resources.json").read_text())
+            relationships = [
+                {
+                    "uri": "ams-work:relationship/self",
+                    "type": "archimate://relationship-type/association",
+                    "from": "ams-work:component/zaaksysteem",
+                    "to": "urn:openea:workspace:alex:amsterdam:component/zaaksysteem",
+                }
+            ]
+            for name, value in (
+                ("metadata.json", metadata),
+                ("resources.json", resources),
+                ("relationships.json", relationships),
+            ):
+                (target / name).write_text(json.dumps(value), encoding="utf-8")
+
+            errors, _, _ = validate_repository(target, PROJECT_ROOT)
+            self.assertEqual([], errors)
+
+    def test_malformed_resource_and_namespace_uris_are_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            metadata = json.loads((WORKSPACE_START / "metadata.json").read_text())
+            resources = json.loads((WORKSPACE_START / "resources.json").read_text())
+            metadata["namespaces"]["broken"] = "https://"
+            resources[0]["uri"] = "not an absolute URI"
+            resources.append(
+                {
+                    "uri": "https://exa[mple",
+                    "type": "archimate://element-type/application-component",
+                    "name": "Malformed HTTPS identifier",
+                }
+            )
+            for name, value in (
+                ("metadata.json", metadata),
+                ("resources.json", resources),
+                ("relationships.json", []),
+            ):
+                (target / name).write_text(json.dumps(value), encoding="utf-8")
+
+            errors, _, _ = validate_repository(target, PROJECT_ROOT)
+            messages = "\n".join(map(str, errors))
+            self.assertIn("metadata.namespaces.broken", messages)
+            self.assertIn("resources[0].uri", messages)
+            self.assertIn("resources[1].uri", messages)
 
     def test_reports_invalid_values_duplicates_and_dangling_references(self):
         with tempfile.TemporaryDirectory() as directory:

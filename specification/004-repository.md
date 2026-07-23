@@ -10,7 +10,10 @@ Implementations MAY split these files for scale, provided the logical model rema
 
 ## Metadata
 
-Metadata declares the repository URI, version, active metamodel packages and namespaces.
+Metadata declares the repository URI, version, active metamodel packages and
+namespaces. Namespace values MUST be valid absolute URIs but need not use HTTP
+or resolve publicly. Declared prefixes MAY abbreviate identifiers as specified
+in `003-uri.md`.
 
 ## Resources
 

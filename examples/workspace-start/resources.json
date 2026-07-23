@@ -1,0 +1,10 @@
+[
+  {
+    "uri": "ams-work:component/zaaksysteem",
+    "type": "archimate://element-type/application-component",
+    "name": "Zaaksysteem",
+    "description": "A provisional resource in a working namespace.",
+    "status": "inUse",
+    "confidence": "assumed"
+  }
+]

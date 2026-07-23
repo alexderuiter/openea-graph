@@ -5,8 +5,16 @@
   "type": "object",
   "required": ["uri", "type", "name"],
   "properties": {
-    "uri": { "type": "string", "format": "uri" },
-    "type": { "type": "string", "format": "uri" },
+    "uri": {
+      "type": "string",
+      "format": "uri",
+      "description": "An absolute URI or a compact identifier using a namespace prefix declared by the repository."
+    },
+    "type": {
+      "type": "string",
+      "format": "uri",
+      "description": "An absolute type URI or a compact identifier using a declared namespace prefix."
+    },
     "name": { "type": "string", "minLength": 1 },
     "description": { "type": "string" },
     "status": {

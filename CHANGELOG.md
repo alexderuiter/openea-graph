@@ -12,6 +12,8 @@ changes are documented explicitly in RFCs and release notes.
 
 - Apache License 2.0 licensing and contribution terms.
 - `openea init` for creating a minimal repository safely.
+- Workspace and provisional URN namespaces, including compact identifier
+  expansion.
 - A first-repository tutorial and tooling placement decision.
 - Distribution packaging for bundled metamodel packages.
 - CI coverage for supported Python versions and installed-wheel smoke testing.
