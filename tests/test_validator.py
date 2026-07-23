@@ -1,8 +1,12 @@
 import json
+import io
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 
+from openea.cli import main
+from openea.initializer import InitializationError, initialize_repository
 from openea.reasoner import derive_inverse_relationships
 from openea.validator import validate_repository
 
@@ -12,6 +16,49 @@ DEMO = PROJECT_ROOT / "examples" / "gemeente-demo"
 
 
 class ValidatorTests(unittest.TestCase):
+    def test_init_creates_a_minimal_valid_repository(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "my-architecture"
+            initialize_repository(
+                target,
+                name="My architecture",
+                uri="oea://example.org/my-architecture/repository",
+                namespace="oea://example.org/my-architecture/",
+            )
+
+            self.assertEqual(
+                {"metadata.json", "resources.json", "relationships.json"},
+                {path.name for path in target.iterdir()},
+            )
+            metadata = json.loads((target / "metadata.json").read_text())
+            self.assertEqual("My architecture", metadata["name"])
+            self.assertEqual("oea://example.org/my-architecture/repository", metadata["uri"])
+            self.assertEqual(
+                "oea://example.org/my-architecture/", metadata["namespaces"]["oea"]
+            )
+            errors, _, _ = validate_repository(target, PROJECT_ROOT)
+            self.assertEqual([], errors)
+
+    def test_init_refuses_to_overwrite_a_non_empty_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            existing = target / "keep.txt"
+            existing.write_text("keep", encoding="utf-8")
+
+            with self.assertRaises(InitializationError):
+                initialize_repository(target)
+            self.assertEqual("keep", existing.read_text(encoding="utf-8"))
+
+    def test_init_cli_reports_the_next_command(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "first-repository"
+            output = io.StringIO()
+            with redirect_stdout(output):
+                result = main(["init", str(target)])
+
+            self.assertEqual(0, result)
+            self.assertIn(f"openea validate {target}", output.getvalue())
+
     def test_gemeente_demo_is_valid(self):
         errors, _, _ = validate_repository(DEMO, PROJECT_ROOT)
         self.assertEqual([], errors)
