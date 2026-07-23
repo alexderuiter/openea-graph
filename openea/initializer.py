@@ -30,14 +30,14 @@ def initialize_repository(
 
     repository_name = name or target.name.replace("-", " ").replace("_", " ").strip().title()
     repository_name = repository_name or "OpenEA Graph repository"
-    local_namespace = f"oea://local/{_slug(target.name)}/"
-    repository_uri = uri or f"{local_namespace}repository"
+    workspace_namespace = f"urn:openea:workspace:{_slug(target.name)}:"
+    repository_uri = uri or f"{workspace_namespace}repository"
     metadata = {
         "uri": repository_uri,
         "name": repository_name,
         "specificationVersion": SPECIFICATION_VERSION,
         "metamodels": [CORE_METAMODEL],
-        "namespaces": {"oea": namespace or local_namespace},
+        "namespaces": {"work": namespace or workspace_namespace},
     }
 
     target.mkdir(parents=True, exist_ok=True)

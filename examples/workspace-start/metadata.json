@@ -1,0 +1,15 @@
+{
+  "uri": "urn:openea:workspace:alex:amsterdam:repository",
+  "name": "Amsterdam working architecture example",
+  "description": "A working repository namespace; not an official Gemeente Amsterdam namespace.",
+  "specificationVersion": "0.1.0-draft",
+  "metamodels": [
+    "oea://metamodel/core/0.1",
+    "archimate://metamodel/3.2"
+  ],
+  "namespaces": {
+    "ams-work": "urn:openea:workspace:alex:amsterdam:",
+    "openea": "https://openea.dev/ns/",
+    "gemma": "https://gemmaonline.nl/id/"
+  }
+}

@@ -1,14 +1,19 @@
 from __future__ import annotations
 
 import json
+import re
 import sysconfig
 from dataclasses import dataclass
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlsplit
 
 
 LIFECYCLE_STATUSES = {"concept", "planned", "inUse", "phasingOut", "retired", "rejected"}
 CONFIDENCE_VALUES = {"proposed", "assumed", "uncertain", "verified"}
+URI_PATTERN = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]*:(.+)$")
+PREFIX_PATTERN = re.compile(r"^[A-Za-z][A-Za-z0-9._-]*$")
+INVALID_URI_CHARACTERS = re.compile(r"[\x00-\x20<>\"{}|\\^`]")
+INVALID_PERCENT_ENCODING = re.compile(r"%(?![0-9A-Fa-f]{2})")
 
 
 @dataclass(frozen=True)
@@ -31,7 +36,56 @@ def _load_json(path: Path, errors: list[ValidationError]):
 
 
 def _is_uri(value: object) -> bool:
-    return isinstance(value, str) and bool(urlparse(value).scheme)
+    if not isinstance(value, str) or INVALID_URI_CHARACTERS.search(value):
+        return False
+    match = URI_PATTERN.fullmatch(value)
+    if match is None or INVALID_PERCENT_ENCODING.search(value):
+        return False
+    scheme = value.split(":", 1)[0].lower()
+    remainder = match.group(1)
+    try:
+        parsed = urlsplit(value)
+    except ValueError:
+        return False
+    if scheme in {"http", "https"}:
+        return bool(parsed.netloc)
+    if remainder.startswith("//") and not parsed.netloc:
+        return False
+    if scheme == "urn":
+        namespace_identifier, separator, namespace_specific = remainder.partition(":")
+        return bool(separator and namespace_identifier and namespace_specific)
+    return bool(remainder)
+
+
+def expand_identifier(value: object, namespaces: dict[str, str]) -> object:
+    """Expand a declared compact identifier; leave other values unchanged."""
+    if not isinstance(value, str):
+        return value
+    prefix, separator, reference = value.partition(":")
+    if separator and prefix in namespaces:
+        return f"{namespaces[prefix]}{reference}"
+    return value
+
+
+def _load_namespaces(metadata: dict, errors: list[ValidationError]) -> dict[str, str]:
+    value = metadata.get("namespaces", {})
+    if not isinstance(value, dict):
+        errors.append(ValidationError("metadata.namespaces", "must be an object"))
+        return {}
+
+    namespaces: dict[str, str] = {}
+    for prefix, namespace in value.items():
+        location = f"metadata.namespaces.{prefix}"
+        if not isinstance(prefix, str) or PREFIX_PATTERN.fullmatch(prefix) is None:
+            errors.append(ValidationError(location, "prefix is invalid"))
+            continue
+        if not _is_uri(namespace):
+            errors.append(
+                ValidationError(location, f"{namespace!r} is not a valid absolute URI")
+            )
+            continue
+        namespaces[prefix] = namespace
+    return namespaces
 
 
 def _package_directory(metamodel_root: Path, package_uri: str) -> Path | None:
@@ -88,6 +142,7 @@ def validate_repository(repository: Path, project_root: Path | None = None):
     if not isinstance(metadata, dict) or not isinstance(resources, list) or not isinstance(relationships, list):
         return errors, [], []
 
+    namespaces = _load_namespaces(metadata, errors)
     resource_types, relationship_types, rules = load_vocabulary(metamodel_root, metadata, errors)
     resource_uris: set[str] = set()
     all_uris: set[str] = set()
@@ -101,16 +156,17 @@ def validate_repository(repository: Path, project_root: Path | None = None):
             if field not in resource:
                 errors.append(ValidationError(f"{location}.{field}", "is required"))
         uri = resource.get("uri")
-        if uri is not None and not _is_uri(uri):
+        expanded_uri = expand_identifier(uri, namespaces)
+        if uri is not None and not _is_uri(expanded_uri):
             errors.append(ValidationError(f"{location}.uri", f"{uri!r} is not a valid absolute URI"))
-        elif isinstance(uri, str):
-            if uri in all_uris:
+        elif isinstance(expanded_uri, str):
+            if expanded_uri in all_uris:
                 errors.append(ValidationError(f"{location}.uri", f"duplicate URI {uri!r}"))
-            all_uris.add(uri)
-            resource_uris.add(uri)
-        type_uri = resource.get("type")
+            all_uris.add(expanded_uri)
+            resource_uris.add(expanded_uri)
+        type_uri = expand_identifier(resource.get("type"), namespaces)
         if type_uri is not None and type_uri not in resource_types:
-            errors.append(ValidationError(f"{location}.type", f"unknown resource type {type_uri!r}"))
+            errors.append(ValidationError(f"{location}.type", f"unknown resource type {resource.get('type')!r}"))
         name = resource.get("name")
         if name is not None and (not isinstance(name, str) or not name.strip()):
             errors.append(ValidationError(f"{location}.name", "must be a non-empty string"))
@@ -130,18 +186,20 @@ def validate_repository(repository: Path, project_root: Path | None = None):
             if field not in relationship:
                 errors.append(ValidationError(f"{location}.{field}", "is required"))
         uri = relationship.get("uri")
-        if uri is not None and not _is_uri(uri):
+        expanded_uri = expand_identifier(uri, namespaces)
+        if uri is not None and not _is_uri(expanded_uri):
             errors.append(ValidationError(f"{location}.uri", f"{uri!r} is not a valid absolute URI"))
-        elif isinstance(uri, str):
-            if uri in all_uris:
+        elif isinstance(expanded_uri, str):
+            if expanded_uri in all_uris:
                 errors.append(ValidationError(f"{location}.uri", f"duplicate URI {uri!r}"))
-            all_uris.add(uri)
-        predicate = relationship.get("type")
+            all_uris.add(expanded_uri)
+        predicate = expand_identifier(relationship.get("type"), namespaces)
         if predicate is not None and predicate not in relationship_types:
-            errors.append(ValidationError(f"{location}.type", f"unknown relationship type/predicate {predicate!r}"))
+            errors.append(ValidationError(f"{location}.type", f"unknown relationship type/predicate {relationship.get('type')!r}"))
         for field in ("from", "to"):
             target = relationship.get(field)
-            if target is not None and target not in resource_uris:
+            expanded_target = expand_identifier(target, namespaces)
+            if target is not None and expanded_target not in resource_uris:
                 errors.append(ValidationError(f"{location}.{field}", f"references unknown resource {target!r}"))
 
     return errors, relationships, rules

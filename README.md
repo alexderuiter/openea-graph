@@ -80,6 +80,29 @@ OK: examples/gemeente-demo is a valid OpenEA Graph 0.1 repository.
 See [Getting started](docs/getting-started.md) for the complete first-repository
 walkthrough.
 
+## Start without an official namespace
+
+You do not need a public domain or an organization-assigned namespace to begin.
+`openea init` creates a valid provisional workspace URN:
+
+```bash
+openea init my-architecture
+```
+
+```json
+{
+  "uri": "urn:openea:workspace:my-architecture:repository",
+  "namespaces": {
+    "work": "urn:openea:workspace:my-architecture:"
+  }
+}
+```
+
+Workspace names are local disambiguators, not claims of organizational
+authority. They can be used directly or through compact identifiers such as
+`work:component/zaaksysteem`. Resources can later be mapped or migrated to
+canonical identifiers without invalidating the early modeling history.
+
 Run the minimal inverse reasoner without changing the repository:
 
 ```bash
@@ -110,6 +133,8 @@ python -m openea reason examples/gemeente-demo
 The v0.1 validator checks:
 
 - unique resource and relationship URIs;
+- absolute HTTP(S), URN and other valid URI schemes;
+- declared namespace values and compact identifier expansion;
 - required Resource fields (`uri`, `type`, `name`);
 - known resource types and relationship predicates from active metamodel packages;
 - lifecycle status and confidence values when present;
